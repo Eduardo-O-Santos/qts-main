@@ -4,19 +4,29 @@ if (session_status() !== PHP_SESSION_ACTIVE) :
 endif;
 #ARMAZENA O ID DO ULTIMO ATENDIMENTO.
 //define("ULTIMO_ATENDIMENTO",isset($_SESSION["IDATENDIMENTO"]) ? $_SESSION["IDATENDIMENTO"] : null );
-function __autoload($nomeClasse)
+function my_autoload($nomeClasse)
 {
     include_once './classes/' . $nomeClasse . '.class.php';
 }
+
+spl_autoload_register("my_autoload");
+
 $modulo = Url::getURL(0);
 //SETAMOS COMO DEFAULT O TIME ZONE DE PORTO VELHO.
 date_default_timezone_set('America/Porto_Velho');
 function dateConvert($dateSql)
 {
-    $ano = substr($dateSql, 6);
-    $mes = substr($dateSql, 3, -5);
-    $dia = substr($dateSql, 0, -8);
+    $ano = substr($dateSql, 6, 4);
+    $mes = substr($dateSql, 3, 2);
+    $dia = substr($dateSql, 0, 2);
     return $ano . "-" . $mes . "-" . $dia;
+}
+function dateConvertBr($dateSql)
+{
+    $ano = substr($dateSql, 0, 4);
+    $mes = substr($dateSql, 5, 2);
+    $dia = substr($dateSql, 8, 2);
+    return $dia . "/" . $mes . "/" . $ano;
 }
 //constantes do projeto
 define('EMAIL', [
@@ -28,8 +38,8 @@ define('EMAIL', [
 
 define('PROJETO', 'atron');
 define('ICONE', 'imagens/icone.svg');
-define('BASE_URL', 'https://localhost/');
-define('HOME', BASE_URL . 'painel');
+define('BASE_URL', 'http://localhost/qts-main/');
+define('HOME', BASE_URL . 'painel.php');
 define('LOGIN', BASE_URL . 'login');
 define('URL', BASE_URL);
 define('BUSCA', BASE_URL . 'busca');
